@@ -9,9 +9,10 @@ class ImageManagementGenerator < Rails::Generators::Base
 
   def self.next_migration_number(dirname)
     if ActiveRecord::Base.timestamped_migrations
-      # We use nano milli seconds here to avoid ID conflicts on multiple migrations
+      # Sleep here to avoid timestamp conflicts in migrations
+      sleep 1
       time = Time.now.utc
-      "#{time.strftime("%Y%m%d%H%M%S")}#{time.usec}"
+      "#{time.strftime("%Y%m%d%H%M%S")}"
     else
       "%.3d" % (current_migration_number(dirname) + 1)
     end
