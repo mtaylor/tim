@@ -25,4 +25,8 @@ class ImageManagementGenerator < Rails::Generators::Base
     migration_template 'migrations/create_provider_images.rb', 'db/migrate/create_provider_images.rb'
     migration_template 'migrations/create_templates.rb', 'db/migrate/create_templates.rb'
   end
+
+  def copy_initializer_file
+    copy_file "intializers/image_management_engine.rb", "config/initializers/image_management_engine.rb"
+  end
 end
