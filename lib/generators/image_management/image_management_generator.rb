@@ -18,10 +18,10 @@ class ImageManagementGenerator < Rails::Generators::Base
   end
 
   def create_migration_file
-    migration_template 'create_base_images.rb', 'db/migrate/create_base_images.rb'
-    migration_template 'create_image_versions.rb', 'db/migrate/create_image_versions.rb'
-    migration_template 'create_target_images.rb', 'db/migrate/create_target_images.rb'
-    migration_template 'create_provider_images.rb', 'db/migrate/create_provider_images.rb'
-    migration_template 'create_templates.rb', 'db/migrate/create_templates.rb'
+    migration_template 'migrations/create_base_images.rb', 'db/migrate/create_base_images.rb'
+    migration_template 'migrations/create_image_versions.rb', 'db/migrate/create_image_versions.rb'
+    migration_template 'migrations/create_target_images.rb', 'db/migrate/create_target_images.rb'
+    migration_template 'migrations/create_provider_images.rb', 'db/migrate/create_provider_images.rb'
+    migration_template 'migrations/create_templates.rb', 'db/migrate/create_templates.rb'
   end
 end
