@@ -2,8 +2,9 @@ class CreateTemplates < ActiveRecord::Migration
   def self.up
     create_table :templates do |t|
       t.integer :id
-      # URI used to locate the file on disk/remote
-      t.string :location
+      # TODO: Investigate best was to store and retreive XML files
+      # Stores inner XML content
+      t.string :tdl
 
       t.timestamps
     end
