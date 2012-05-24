@@ -3,8 +3,7 @@ class CreateTemplates < ActiveRecord::Migration
     create_table :templates do |t|
       t.integer :id
       # TODO: Investigate best was to store and retreive XML files
-      # Stores inner XML content
-      t.string :tdl
+      t.string :xml
 
       t.timestamps
     end

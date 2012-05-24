@@ -40,7 +40,8 @@ module ImageManagement
     # POST /templates
     # POST /templates.xml
     def create
-      @template = ImageManagement::Template.new(params[:template])
+      # TODO Validate template
+      @template = ImageManagement::Template.new(:xml => request.body.read)
 
       respond_to do |format|
         if @template.save
