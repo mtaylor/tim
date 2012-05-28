@@ -41,7 +41,11 @@ module ImageManagement
     # POST /base_images
     # POST /base_images.xml
     def create
-      #@base_image = ImageManagement::BaseImage.new(params[:base_image])
+      # TODO fix with proper support for generating nested resources
+      template = template_from_params
+
+      @base_image = ImageManagement::BaseImage.new(params[:base_image])
+      @base_image.template = template
       puts params[:base_image].inspect
 
       respond_to do |format|
@@ -80,6 +84,21 @@ module ImageManagement
       respond_to do |format|
         format.html { redirect_to image_management_base_images_url }
         format.xml { head :no_content }
+      end
+    end
+
+    private
+    # TODO override create, update attributes in model or find correct way to
+    # mass assign nested attributed with module namespace
+    def template_from_params
+      if t = params[:base_image].delete(:template)
+        if id = t[:id]
+          Template.find(id)
+        else
+          Template.new(t)
+        end
+      else
+        nil
       end
     end
   end
