@@ -7,7 +7,7 @@ module ImageManagement
 
       respond_to do |format|
         format.html # index.html.erb
-        format.xml { render :xml => @base_images }
+        format.xml # index.xml
       end
     end
 
@@ -18,7 +18,7 @@ module ImageManagement
 
       respond_to do |format|
         format.html # show.html.erb
-        format.xml { render :xml => @base_image }
+        format.xml # show.xml
       end
     end
 
@@ -29,7 +29,6 @@ module ImageManagement
 
       respond_to do |format|
         format.html # new.html.erb
-        format.xml { render :xml => @base_image }
       end
     end
 
@@ -51,7 +50,7 @@ module ImageManagement
       respond_to do |format|
         if @base_image.save
           format.html { redirect_to @base_image, :notice => 'Base image was successfully created.' }
-          format.xml { render :xml => @base_image, :status => :created, :location => @base_image }
+          format.xml { render :action => "show", :status => :created }
         else
           format.html { render :action => "new" }
           format.xml { render :xml => @base_image.errors, :status => :unprocessable_entity }
