@@ -60,7 +60,7 @@ module ImageManagement
 
       respond_to do |format|
         if @image_version.update_attributes(params[:image_version])
-          format.html { redirect_to @image_version, :notice => 'Base image was successfully updated.' }
+          format.html { redirect_to @image_version, :notice => 'Image version was successfully updated.' }
           format.xml { head :no_content }
         else
           format.html { render :action => "edit" }
