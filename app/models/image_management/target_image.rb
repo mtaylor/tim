@@ -5,7 +5,9 @@ module ImageManagement
 
     before_save :create_factory_target_image
 
-    attr_accessible :target
+    attr_accessible :target, :image_version
+
+    accepts_nested_attributes_for :image_version, :class_name => "ImageManagement::ImageVersion"
 
     def template
       image_version.base_image.template
