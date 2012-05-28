@@ -40,16 +40,13 @@ module ImageManagement
     # POST /base_images
     # POST /base_images.xml
     def create
-      # TODO fix with proper support for generating nested resources
-      template = template_from_params
+      set_template_xml
 
       @base_image = ImageManagement::BaseImage.new(params[:base_image])
-      @base_image.template = template
-      puts params[:base_image].inspect
 
       respond_to do |format|
         if @base_image.save
-          format.html { redirect_to @base_image, :notice => 'Base image was successfully created.' }
+          format.html { redirect_to image_management_base_image_path(@base_image), :notice => 'Image version was successfully created.' }
           format.xml { render :action => "show", :status => :created }
         else
           format.html { render :action => "new" }
@@ -61,6 +58,7 @@ module ImageManagement
     # PUT /base_images/1
     # PUT /base_images/1.xml
     def update
+      set_template_xml
       @base_image = ImageManagement::BaseImage.find(params[:id])
 
       respond_to do |format|
@@ -87,17 +85,11 @@ module ImageManagement
     end
 
     private
-    # TODO override create, update attributes in model or find correct way to
-    # mass assign nested attributed with module namespace
-    def template_from_params
-      if t = params[:base_image].delete(:template)
-        if id = t[:id]
-          Template.find(id)
-        else
-          Template.new(t)
-        end
-      else
-        nil
+    # Handles the cases when the template xml is supplied within request
+    def set_template_xml
+      doc = Nokogiri::XML request.body.read
+      if !doc.xpath("//base_image/template/xml").empty?
+        params[:base_image][:template][:xml] = doc.xpath("//base_image/template/xml").children.to_s
       end
     end
   end
