@@ -53,8 +53,8 @@ module ActiveRecord
     # TODO Add support for one to many relational attributes
     def self.created_nested_resources(resource, attributes={})
       self.nested_attributes_options.each_pair do | key, value |
-        if value[:class_name] && attributes.keys.include?(key)
-          if nested_resource = create_nested_resource(value[:class_name], attributes.delete(key))
+        if value[:class_name] && attributes.keys.include?(key.to_s)
+          if nested_resource = create_nested_resource(value[:class_name], attributes.delete(key.to_s))
             resource.send(key.to_s + "=", nested_resource)
           end
         end
