@@ -40,15 +40,21 @@ module ImageManagement
     # POST /image_versions
     # POST /image_versions.xml
     def create
-      @image_version = ImageManagement::ImageVersion.new(params[:image_version])
-
       respond_to do |format|
-        if @image_version.save
-          format.html { redirect_to image_management_image_version_path(@image_version), :notice => 'Image version was successfully created.' }
-          format.xml { render :action => "show", :status => :created }
-        else
+        begin
+          @image_version = ImageManagement::ImageVersion.new(params[:image_version])
+
+          if @image_version.save
+            format.html { redirect_to image_management_image_version_path(@image_version), :notice => 'Image version was successfully created.' }
+            format.xml { render :action => "show", :status => :created }
+          else
+            format.html { render :action => "new" }
+            format.xml { render :xml => @image_version.errors, :status => :unprocessable_entity }
+          end
+        # TODO Add in proper exception handling in appliation controller
+        rescue => e
           format.html { render :action => "new" }
-          format.xml { render :xml => @image_version.errors, :status => :unprocessable_entity }
+          format.xml { render :xml => e.message, :status => :unprocessable_entity } 
         end
       end
     end
@@ -56,15 +62,21 @@ module ImageManagement
     # PUT /image_versions/1
     # PUT /image_versions/1.xml
     def update
-      @image_version = ImageManagement::ImageVersion.find(params[:id])
-
       respond_to do |format|
-        if @image_version.update_attributes(params[:image_version])
-          format.html { redirect_to @image_version, :notice => 'Image version was successfully updated.' }
-          format.xml { head :no_content }
-        else
-          format.html { render :action => "edit" }
-          format.xml { render :xml => @image_version.errors, :status => :unprocessable_entity }
+        begin
+          @image_version = ImageManagement::ImageVersion.find(params[:id])
+  
+          if @image_version.update_attributes(params[:image_version])
+            format.html { redirect_to @image_version, :notice => 'Image version was successfully updated.' }
+            format.xml { head :no_content }
+          else
+            format.html { render :action => "edit" }
+            format.xml { render :xml => @image_version.errors, :status => :unprocessable_entity }
+          end
+        # TODO Add in proper exception handling in appliation controller
+        rescue => e
+          format.html { render :action => "new" }
+          format.xml { render :xml => e.message, :status => :unprocessable_entity } 
         end
       end
     end
