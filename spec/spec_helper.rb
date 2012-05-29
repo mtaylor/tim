@@ -5,9 +5,18 @@ require File.expand_path("../../lib/image_factory/image_factory.rb",  __FILE__)
 require 'rspec/rails'
 require 'factory_girl'
 
-Dir.glob(File.dirname(__FILE__) + "/factories/*/*").each do |factory|
-  require factory
+Dir.glob(File.join(File.dirname(__FILE__) + "/factories/", "**", "*.rb")).each do |file|
+  require file
 end
+
+
+# Dir.glob(File.dirname(__FILE__) + "/factories/*/*").each do |factory|
+  # require factory
+# end
+# 
+# Dir.glob(File.dirname(__FILE__) + "/factories/*/*/*").each do |factory|
+  # require factory
+# end
 
 RSpec.configure do |config|
   config.color_enabled = true
