@@ -40,17 +40,21 @@ module ImageManagement
     # POST /base_images
     # POST /base_images.xml
     def create
-      set_template_xml
-
-      @base_image = ImageManagement::BaseImage.new(params[:base_image])
-
       respond_to do |format|
-        if @base_image.save
-          format.html { redirect_to image_management_base_image_path(@base_image), :notice => 'Image version was successfully created.' }
-          format.xml { render :action => "show", :status => :created }
-        else
+        begin
+          set_template_xml
+          @base_image = ImageManagement::BaseImage.new(params[:base_image])
+          if @base_image.save
+            format.html { redirect_to image_management_base_image_path(@base_image), :notice => 'Image version was successfully created.' }
+            format.xml { render :action => "show", :status => :created }
+          else
+            format.html { render :action => "new" }
+            format.xml { render :xml => @base_image.errors, :status => :unprocessable_entity }
+          end
+        # TODO Add proper exception handling in application controller
+        rescue => e
           format.html { render :action => "new" }
-          format.xml { render :xml => @base_image.errors, :status => :unprocessable_entity }
+          format.xml { render :xml => "<error>" + e.message + "</error>", :status => :unprocessable_entity }
         end
       end
     end
@@ -58,16 +62,24 @@ module ImageManagement
     # PUT /base_images/1
     # PUT /base_images/1.xml
     def update
-      set_template_xml
-      @base_image = ImageManagement::BaseImage.find(params[:id])
-
       respond_to do |format|
-        if @base_image.update_attributes(params[:base_image])
-          format.html { redirect_to @base_image, :notice => 'Base image was successfully updated.' }
-          format.xml { head :no_content }
-        else
-          format.html { render :action => "edit" }
-          format.xml { render :xml => @base_image.errors, :status => :unprocessable_entity }
+        begin
+          set_template_xml
+          @base_image = ImageManagement::BaseImage.find(params[:id])
+    
+          respond_to do |format|
+            if @base_image.update_attributes(params[:base_image])
+              format.html { redirect_to @base_image, :notice => 'Base image was successfully updated.' }
+              format.xml { head :no_content }
+            else
+              format.html { render :action => "edit" }
+              format.xml { render :xml => @base_image.errors, :status => :unprocessable_entity }
+            end
+          end
+        # TODO Add proper exception handling in application controller
+        rescue => e
+          format.html { render :action => "new" }
+          format.xml { render :xml => "<error>" + e.message + "</error>", :status => :unprocessable_entity }
         end
       end
     end
@@ -92,5 +104,6 @@ module ImageManagement
         params[:base_image][:template][:xml] = doc.xpath("//base_image/template/xml").children.to_s
       end
     end
+
   end
 end
