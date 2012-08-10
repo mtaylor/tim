@@ -4,6 +4,7 @@ module ImageManagement
   describe ProviderImage do
     before (:each) do
       TargetImage.any_instance.stub(:create_factory_target_image).and_return(true)
+      ProviderImage.any_instance.stub(:create_factory_provider_image).and_return(true)
     end
 
     describe "Model relationships" do
