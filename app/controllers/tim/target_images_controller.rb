@@ -52,10 +52,12 @@ module Tim
 
     # TODO Add factory permission check
     def factory_keys
-      if params[:target_image][:percent_complete] && params[:target_image][:status_detail][:activity]
-        params[:target_image] = { :progress => params[:target_image][:percent_complete],
-                                  :status_detail => params[:target_image][:status_detail][:activity],
-                                  :status => params[:target_image][:status] }
+      if params[:target_image]
+        if params[:target_image][:percent_complete] && params[:target_image][:status_detail][:activity]
+          params[:target_image] = { :progress => params[:target_image][:percent_complete],
+                                    :status_detail => params[:target_image][:status_detail][:activity],
+                                    :status => params[:target_image][:status] }
+        end
       end
     end
 
