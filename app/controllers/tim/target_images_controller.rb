@@ -36,6 +36,7 @@ module Tim
 
     def update
       @target_image = Tim::TargetImage.find(params[:id]) unless defined? @target_image
+      puts params[:target_image]
       if @target_image.update_attributes(params[:target_image])
         flash[:notice] = 'Target image was successfully updated.'
       end
@@ -52,12 +53,11 @@ module Tim
 
     # TODO Add factory permission check
     def factory_keys
-      if params[:target_image]
-        if params[:target_image][:percent_complete] && params[:target_image][:status_detail][:activity]
-          params[:target_image] = { :progress => params[:target_image][:percent_complete],
-                                    :status_detail => params[:target_image][:status_detail][:activity],
-                                    :status => params[:target_image][:status] }
-        end
+      begin
+        params[:target_image][:progress] = params[:target_image][:percent_complete]
+        params[:target_image][:status_detail] = [:target_image][:status_detail][:activity]
+        params[:target_image][:status] = params[:target_image][:status]
+      rescue
       end
     end
 

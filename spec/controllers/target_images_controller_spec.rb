@@ -161,6 +161,12 @@ module Tim
           body["target_image"]["status_detail"].should == "Building Image"
           body["target_image"]["progress"].should == "100"
         end
+
+        it "should return unprocessable entity when invalid request is sent" do
+          target_image = FactoryGirl.create(:target_image_with_full_tree)
+          put :update, :id => target_image.id
+          response.code.should == "200"
+        end
       end
     end
   end
