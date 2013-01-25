@@ -35,6 +35,7 @@ module Tim
     end
 
     def update
+      puts params[:provider_image]
       @provider_image = Tim::ProviderImage.find(params[:id]) unless defined? @provider_image
       if @provider_image.update_attributes(params[:provider_image])
         flash[:notice] = 'Provider image was successfully updated.'
@@ -51,12 +52,21 @@ module Tim
     private
     # TODO Add factory permission check
     def factory_keys
-      if params[:provider_image][:percent_complete] && params[:provider_image][:status_detail][:activity]
+      if factory_callback?
         params[:provider_image] = { :progress => params[:provider_image][:percent_complete],
                                     :status_detail => params[:provider_image][:status_detail][:activity],
-                                    :status => params[:provider_image][:status],
                                     :external_image_id => params[:provider_image][:identifier_on_provider] }
       end
+    end
+
+    def factory_callback?
+      # FIXME We need a better method for checking whether this is a client
+      # request or a factory callback
+      params[:provider_image] &&
+      params[:provider_image][:percent_complete] &&
+      params[:provider_image][:status_detail] &&
+      params[:provider_image][:status_detail][:activity] &&
+      params[:provider_image][:identifier_on_provider]
     end
   end
 end

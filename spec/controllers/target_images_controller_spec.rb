@@ -162,10 +162,10 @@ module Tim
           body["target_image"]["progress"].should == "100"
         end
 
-        it "should return unprocessable entity when invalid request is sent" do
+        it "should return unprocessable entity when invalid factory request is received" do
           target_image = FactoryGirl.create(:target_image_with_full_tree)
-          put :update, :id => target_image.id
-          response.code.should == "200"
+          put :update, :id => target_image.id, :target_image => {:percent_complete => 0}
+          response.code.should == "422"
         end
       end
     end
